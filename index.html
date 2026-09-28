@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Retro tic-tac-toe arcade cabinet">
+  <title>Retro Tic-Tac-Toe Arcade</title>
+
+  <style>
+    /* 0. Design variables */
+    :root {
+      --bg: #0c0a1a;
+      --surface: #16132b;
+      --ink: #f8fafc;
+      --pink: #f147b6;
+      --cyan: #22d3ee;
+      --yellow: #facc15;
+      --radius: 14px;
+      --space: 1rem;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+      padding: 20px;
+    }
+
+    /* 1. Flexbox */
+    .cabinet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space);
+      max-width: 900px;
+      margin: 0 auto 30px;
+      padding: var(--space);
+      background: var(--surface);
+      border: 2px solid var(--pink);
+      border-radius: var(--radius);
+    }
+
+    .logo {
+      color: var(--cyan);
+      font-size: 1.7rem;
+    }
+
+    .cabinet-nav {
+      display: flex;
+      gap: 18px;
+    }
+
+    .cabinet-nav a {
+      color: var(--ink);
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+    }
+
+    main {
+      max-width: 900px;
+      margin: auto;
+    }
+
+    section {
+      margin-bottom: 40px;
+    }
+
+    h2 {
+      color: var(--yellow);
+      margin-bottom: 16px;
+    }
+
+    /* 2. CSS Grid */
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 110px);
+      grid-template-areas:
+        "one two three"
+        "four five six"
+        "seven eight nine";
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .tile {
+      min-height: 100px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: var(--surface);
+      border: 2px solid var(--cyan);
+      border-radius: var(--radius);
+      font-size: 1.8rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .tile:nth-child(1) { grid-area: one; }
+    .tile:nth-child(2) { grid-area: two; }
+    .tile:nth-child(3) { grid-area: three; }
+    .tile:nth-child(4) { grid-area: four; }
+    .tile:nth-child(5) { grid-area: five; }
+    .tile:nth-child(6) { grid-area: six; }
+    .tile:nth-child(7) { grid-area: seven; }
+    .tile:nth-child(8) { grid-area: eight; }
+    .tile:nth-child(9) { grid-area: nine; }
+
+    /* 3. Animation */
+    .marquee-text {
+      text-align: center;
+      color: var(--pink);
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+      animation: arcade-move 3s ease-in-out 0.5s both;
+    }
+
+    @keyframes arcade-move {
+      0% {
+        transform: translateX(-30px);
+        color: var(--pink);
+      }
+
+      50% {
+        transform: translateX(30px);
+        color: var(--cyan);
+      }
+
+      100% {
+        transform: translateX(0);
+        color: var(--yellow);
+      }
+    }
+
+    /* Scores */
+    .score-list {
+      list-style-position: inside;
+      background: var(--surface);
+      padding: 20px;
+      border-radius: var(--radius);
+      border-left: 4px solid var(--pink);
+    }
+
+    .score-list li {
+      margin: 8px 0;
+    }
+
+    /* 4. Positioning and z-index */
+    .layer-stack {
+      position: relative;
+      min-height: 260px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .layer {
+      position: absolute;
+      width: 210px;
+      height: 110px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: var(--radius);
+      font-weight: bold;
+    }
+
+    .layer-back {
+      top: 35px;
+      left: 25%;
+      background: var(--cyan);
+      color: #111827;
+      z-index: 1;
+    }
+
+    .layer-mid {
+      top: 75px;
+      left: 35%;
+      background: var(--pink);
+      z-index: 2;
+    }
+
+    .layer-front {
+      top: 115px;
+      left: 45%;
+      background: var(--yellow);
+      color: #111827;
+      z-index: 3;
+    }
+
+    /* 5. Interaction */
+    .tile:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 8px 18px rgba(34, 211, 238, 0.35);
+    }
+
+    .cabinet-nav a:hover {
+      background: var(--pink);
+    }
+
+    .cabinet-nav a:focus-visible,
+    .tile:focus-visible {
+      outline: 3px solid var(--yellow);
+      outline-offset: 4px;
+    }
+
+    .cabinet-footer {
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 20px;
+      text-align: center;
+      border-top: 1px solid var(--cyan);
+    }
+
+    /* 6. Responsive layout */
+    @media (max-width: 768px) {
+      .cabinet-header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .cabinet-nav {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .game-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .tile {
+        min-height: 80px;
+      }
+
+      .layer {
+        width: 160px;
+      }
+
+      .layer-back {
+        left: 8%;
+      }
+
+      .layer-mid {
+        left: 20%;
+      }
+
+      .layer-front {
+        left: 32%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="cabinet-header">
+    <h1 class="logo">🎮 Retro Tic-Tac-Toe</h1>
+
+    <nav class="cabinet-nav" aria-label="Cabinet">
+      <a href="#play">Play</a>
+      <a href="#scores">High Scores</a>
+      <a href="#merch">Layers</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="play" aria-labelledby="play-title">
+      <h2 id="play-title">Press Start</h2>
+
+      <p class="marquee-text">★ READY PLAYER ONE ★</p>
+
+      <div class="game-grid">
+        <div class="tile" tabindex="0">X</div>
+        <div class="tile" tabindex="0">O</div>
+        <div class="tile" tabindex="0">X</div>
+        <div class="tile" tabindex="0">O</div>
+        <div class="tile" tabindex="0">X</div>
+        <div class="tile" tabindex="0">O</div>
+        <div class="tile" tabindex="0">X</div>
+        <div class="tile" tabindex="0">O</div>
+        <div class="tile" tabindex="0">X</div>
+      </div>
+    </section>
+
+    <section id="scores" aria-labelledby="scores-title">
+      <h2 id="scores-title">High Scores</h2>
+
+      <ol class="score-list">
+        <li>AAA - 9,999</li>
+        <li>BBB - 7,500</li>
+        <li>CCC - 5,000</li>
+      </ol>
+    </section>
+
+    <section id="merch" aria-labelledby="merch-title">
+      <h2 id="merch-title">Layered Showcase</h2>
+
+      <div class="layer-stack">
+        <div class="layer layer-back">Back Layer</div>
+        <div class="layer layer-mid">Middle Layer</div>
+        <div class="layer layer-front">Front Layer</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="cabinet-footer">
+    <p>&copy; 2026 Ki Hyun Park, Joe Turner · Activity 05</p>
+  </footer>
+</body>
+</html>
