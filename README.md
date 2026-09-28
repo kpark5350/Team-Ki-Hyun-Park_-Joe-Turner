@@ -2,7 +2,7 @@
 
 ## Team Members
 - Ki Hyun Park
-- Joe Turner
+- Joe Ethan Turner
 
 Google Doc: https://docs.google.com/document/d/1RbpoNbynYEZibIFsU8xLMOHW12wTra960nEQK2Vuv3g/edit?usp=sharing
 
